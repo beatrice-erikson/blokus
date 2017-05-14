@@ -82,6 +82,7 @@ class Piece:
                 if self.m[r][c] == 1:
                     board.matrix[r+bpos.x][c+bpos.y].colorize(self.c)
         self.player.delPiece()
+        return True
                 
 
 class Player:

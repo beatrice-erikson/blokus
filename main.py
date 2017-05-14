@@ -7,7 +7,7 @@ import objects as o
 
 def init(evManager):
     o.createBoard()
-    o.createPlayers(1,evManager)
+    o.createPlayers(4,evManager)
     
 
 def main():
