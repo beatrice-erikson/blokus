@@ -51,7 +51,7 @@ class PygameView:
         for r in range(len(p.curPiece.m)):
             for c in range(len(p.curPiece.m[0])):
                 if p.curPiece.m[r][c] == 1:
-                    pos = n.array((r*20,c*20))
+                    pos = n.array((c*20,r*20))
                     self.window.blit(pieceImg, bpos+pos)
     def Notify(self, event):
         if isinstance(event, e.TickEvent):

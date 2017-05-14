@@ -21,19 +21,19 @@ class LinkedGridNode:
 class LinkedGrid:
     def __init__(self, width, height):
         self.matrix = []
-        for w in range(width):
+        for h in range(height):
             self.matrix.append([])
-            for h in range(height):
+            for w in range(width):
                 if h != 0:
-                    nodeUp = self.matrix[w][h-1]
+                    nodeUp = self.matrix[h-1][w]
                 else:
                     nodeUp = None
                 if w!= 0:
-                    nodeLeft = self.matrix[w-1][h]
+                    nodeLeft = self.matrix[h][w-1]
                 else:
                     nodeLeft = None
                 pos = (w,h)
-                self.matrix[w].append(LinkedGridNode(nodeUp,nodeLeft,pos))
+                self.matrix[h].append(LinkedGridNode(nodeUp,nodeLeft,pos))
 
 class Piece:
     def __init__(self, matrix, player):
@@ -42,7 +42,7 @@ class Piece:
         self.m = np.array(matrix)
     def fixPos(self):
         #add player position to piece array dimensions
-        botright = self.player.pos + self.m.shape
+        botright = self.player.pos + self.m.shape[::-1]
         #check if this goes off the board...
         while botright[0] > 20:#hardcoding size for now, fix for variable board size
             self.player.pos -= (1,0)
@@ -100,9 +100,42 @@ class Piece:
                     if self.m[r][c] == 1:
                         board.matrix[r+bpos.x][c+bpos.y].colorize(self.c)
             self.player.delPiece()
-            return True
+            return True #we placed the piece, so delete it and return true
+        return False #we didn't place the piece =(
+    def placeFirst(self):#check if in corner
+        bpos = board.matrix[self.player.pos[0]][self.player.pos[1]]
+        if self.m[0][0] == 1 and np.array_equal(self.player.pos,np.array([0,0])):
+            #this piece is in the top-left corner!
+            ret = self.place()
+        elif self.m[-1][-1] == 1 and np.array_equal(self.player.pos+self.m.shape, np.array(board.matrix).shape):
+            #this piece is in the bottom-right corner!
+            ret = self.place()
+        elif len(players.players) > 2:
+            #if there are only two players, orthagonally adjacent corners are disallowed
+            if self.m[-1][0] == 1 and self.player.pos[1]+len(self.m) == len(board.matrix):
+                #this piece is in the bottom-left corner!
+                ret = self.place()
+            elif self.m[0][-1] == 1 and self.player.pos[0]+len(self.m[0]) == len(board.matrix[0]):
+                #this piece is in the top-right corner!
+                ret = self.place()
+        else:
+            return False
+        if ret:
+            self.player.hasntPlayed = False
+            print("played first piece")
+            return ret
+    def placeRest(self): #check if diagonal to one of your pieces
+        bpos = board.matrix[self.player.pos[0]][self.player.pos[1]]
+        for r in range(len(self.m)):
+            for c in range(len(self.m[r])):
+                if self.m[r][c] == 1:
+                    cell = board.matrix[r+bpos.x][c+bpos.y]
+                    for ud in [cell.up, cell.down]:
+                        if ud:
+                            for dAdjCell in [ud.left, ud.right]:
+                                if dAdjCell and dAdjCell.color == self.c:
+                                    return self.place()
         return False
-                
 
 class Player:
     def __init__(self, color):
@@ -124,6 +157,7 @@ class Player:
         self.curPiece = self.pieces[1][0]
         self.curPieceIndex = 0
         self.curPieceKey = 1
+        self.hasntPlayed = True
     def setPos(self, pos):
         self.pos = pos
     def getPiece(self, num):
@@ -189,7 +223,10 @@ class Players:
         elif isinstance(event, e.MovePiece):
             self.cur.curPiece.move(event.dir)
         elif isinstance(event, e.PlacePiece):
-            if self.cur.curPiece.place():
+            if self.cur.hasntPlayed:
+                if self.cur.curPiece.placeFirst():
+                    self.evManager.Post(e.NextTurn())
+            elif self.cur.curPiece.placeRest():
                 self.evManager.Post(e.NextTurn())
             
 
