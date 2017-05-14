@@ -80,9 +80,28 @@ class Piece:
         for r in range(len(self.m)):
             for c in range(len(self.m[r])):
                 if self.m[r][c] == 1:
-                    board.matrix[r+bpos.x][c+bpos.y].colorize(self.c)
-        self.player.delPiece()
-        return True
+                    cell = board.matrix[r+bpos.x][c+bpos.y]
+                    if cell.color:
+                        break
+                    #if piece overlaps another piece, we shouldn't place it!
+                    for adjCell in [cell.up,cell.left,cell.down,cell.right]:
+                        if adjCell and adjCell.color == self.c:
+                            break
+                    else:
+                        continue
+                    break
+            else:   #if we didn't break...
+                continue
+            break   #if we did break, break outer loop
+                    
+        else:
+            for r in range(len(self.m)):
+                for c in range(len(self.m[r])):
+                    if self.m[r][c] == 1:
+                        board.matrix[r+bpos.x][c+bpos.y].colorize(self.c)
+            self.player.delPiece()
+            return True
+        return False
                 
 
 class Player:
