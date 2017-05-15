@@ -118,6 +118,8 @@ class Piece:
             elif self.m[0][-1] == 1 and self.player.pos[0]+len(self.m[0]) == len(board.matrix[0]):
                 #this piece is in the top-right corner!
                 ret = self.place()
+            else:
+                return False
         else:
             return False
         if ret:
