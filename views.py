@@ -2,6 +2,7 @@ import events as e
 import objects as o
 import numpy as n
 from pygame import display, Surface, font, image, surfarray
+from os.path import join
 
 class PygameView:
     def __init__(self, evManager):
@@ -20,8 +21,8 @@ class PygameView:
         self.font = font.Font(None, 40)
         display.flip()
     def drawBoard(self):
-        space = image.load("sprites\space.png")
-        pieceImg = image.load("sprites\piece.png")
+        space = image.load(join("sprites", "space.png"))
+        pieceImg = image.load(join("sprites", "piece.png"))
         pieceArray = surfarray.array3d(pieceImg)
         for row in o.board.matrix:
             for cell in row:
@@ -39,7 +40,7 @@ class PygameView:
                     surfarray.blit_array(pieceImg, piece)
                     self.window.blit(pieceImg,(cell.x*20+1,cell.y*20+1))
     def drawPiece(self):
-        pieceImg = image.load("sprites\piece.png")
+        pieceImg = image.load(join("sprites", "piece.png"))
         p = o.players.cur
         pieceArray = surfarray.array3d(pieceImg)
         if p.c == "r":
