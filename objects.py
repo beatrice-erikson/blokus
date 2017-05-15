@@ -208,14 +208,25 @@ class Players:
         self.players = []
         for p in range(ps):
             self.players.append(Player(colors[p]))
+        self.activePlayers = list(self.players)
         self.curI = 0
-        self.cur = self.players[self.curI]
+        self.cur = self.activePlayers[self.curI]
+    def nextTurn(self):
+        self.curI += 1
+        if self.curI >= len(self.activePlayers):
+            self.curI = 0
+        self.cur = self.activePlayers[self.curI]
+    def resign(self):
+        resign = input("Are you sure you want to resign? (y/n)\n")
+        while resign != "y" and resign != "n":
+            resign = input("Please enter y or n: Are you sure you want to resign?\n")
+        if resign == "y":
+            toRes = self.curI
+            self.nextTurn()
+            del self.activePlayers[toRes]
     def Notify(self, event):
         if isinstance(event, e.NextTurn):
-            self.curI += 1
-            if self.curI >= len(self.players):
-                self.curI = 0
-            self.cur = self.players[self.curI]
+            self.nextTurn()
         elif isinstance(event, e.GetPiece):
             self.cur.getPiece(event.num)
         elif isinstance(event, e.NextPiece):
@@ -230,6 +241,9 @@ class Players:
                     self.evManager.Post(e.NextTurn())
             elif self.cur.curPiece.placeRest():
                 self.evManager.Post(e.NextTurn())
+        elif isinstance(event, e.ResignEvent):
+            self.resign()
+                
             
 
 def createBoard(w=20,h=20, c=20):

@@ -53,6 +53,8 @@ class KeyboardController:
                     elif event.key == pygame.K_KP_ENTER \
                          or event.key == pygame.K_RETURN:
                         ev = e.PlacePiece()
+                    elif event.key == pygame.K_ESCAPE:
+                        ev = e.ResignEvent()
                 if ev:
                     self.evManager.Post(ev)
 

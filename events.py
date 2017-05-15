@@ -3,19 +3,19 @@ class Event:
     object and sent to the EventManager
     """
     def __init__(self):
-        self.name = "Generic Event"
+        pass
 
 class TickEvent(Event):
-	def __init__(self):
-		self.name = "CPU Tick Event"
+    def __init__(self):
+        pass
 
 class QuitEvent(Event):
-	def __init__(self):
-		self.name = "Program Quit Event"
+    def __init__(self):
+        pass
 
 class NextTurn(Event):
     def __init__(self):
-        self.name = "Next Turn Event"
+        pass
 
 class GetPiece(Event):
     def __init__(self, num):
@@ -35,7 +35,11 @@ class MovePiece(Event):
 
 class PlacePiece(Event):
     def __init__(self):
-        self.name = "Place Piece Event"
+        pass
+
+class ResignEvent(Event):
+    def __init__(self):
+        pass
 
 class EventManager:
     """this object is responsible for coordinating most communication
