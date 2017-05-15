@@ -1,0 +1,12 @@
+[packages]
+pygame = ">=1.9.3"
+numpy = ">=1.12.1"
+
+
+[dev-packages]
+jupyter = "*"
+ipdb = "*"
+virtualenvwrapper = "*"
+
+[requires]
+python_version = ">=3.4"
