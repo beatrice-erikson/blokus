@@ -8,12 +8,16 @@ class PygameView:
         self.evManager = evManager
         self.evManager.RegisterListener(self)
 
-        self.window = display.set_mode((1400,800))
+        self.window = display.set_mode((500,400))
         self.winsize = self.window.get_size()
         display.set_caption("Blokus")
         self.background = Surface( self.window.get_size() )
         self.background.fill( (255,255,255) )
         self.window.blit( self.background, (0,0) )
+        sbLoc = (len(o.board.matrix)*20+5, 0)
+        self.scorebox = {"surf": Surface((100,200)), "loc": sbLoc }
+        self.scorebox["surf"].fill((255,255,255))
+        self.font = font.Font(None, 40)
         display.flip()
     def drawBoard(self):
         space = image.load("sprites\space.png")
@@ -53,8 +57,17 @@ class PygameView:
                 if p.curPiece.m[r][c] == 1:
                     pos = n.array((c*20,r*20))
                     self.window.blit(pieceImg, bpos+pos)
+    def drawScores(self):
+        self.scorebox["surf"].fill((255,255,255))
+        scores = []
+        for player in o.players.players:
+            scores.append(self.font.render(player.c+": "+str(player.score), True, (0,0,0)))
+        for s in range(len(scores)):
+             self.scorebox["surf"].blit(scores[s],(0,s*50))
+        self.window.blit(self.scorebox["surf"],self.scorebox["loc"])
     def Notify(self, event):
         if isinstance(event, e.TickEvent):
             self.drawBoard()
             self.drawPiece()
+            self.drawScores()
             display.update()

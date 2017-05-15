@@ -122,7 +122,6 @@ class Piece:
             return False
         if ret:
             self.player.hasntPlayed = False
-            print("played first piece")
             return ret
     def placeRest(self): #check if diagonal to one of your pieces
         bpos = board.matrix[self.player.pos[0]][self.player.pos[1]]
@@ -190,6 +189,7 @@ class Player:
     def delPiece(self):
         pKey = self.curPieceKey
         pIn = self.curPieceIndex
+        self.score += pKey
         del self.pieces[pKey][pIn]
         if self.pieces[pKey]:
             self.nextPiece("b")
