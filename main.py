@@ -7,17 +7,7 @@ import objects as o
 
 def init(evManager):
     o.createBoard()
-    while True:
-        try:
-            ps = int(input("How many players? (2-4)\n"))
-            if ps <= 4 and ps >= 2:
-                break
-        except ValueError:
-            pass
-        print("Please enter the number 2, 3, or 4")
-        
-    o.createPlayers(int(ps),evManager)
-    print("Starting a " + str(ps) + " player game.")
+    o.createPlayers(4,evManager)
     print("\nRules:")
     print("Your first piece must be placed in a corner.")
     print("For a two player game, this is restricted to the top-left and bottom-right")
