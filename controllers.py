@@ -15,20 +15,15 @@ class KeyboardController:
                 if event.type == pygame.QUIT:
                     ev = e.QuitEvent()
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_1 \
-                        or event.key == pygame.K_KP2:
+                    if event.key in { pygame.K_1, pygame.K_KP2 }:
                         ev = e.GetPiece(1)
-                    elif event.key == pygame.K_2 \
-                        or event.key == pygame.K_KP2:
+                    elif event.key in { pygame.K_2, pygame.K_KP2 }:
                         ev = e.GetPiece(2)
-                    elif event.key == pygame.K_3 \
-                        or event.key == pygame.K_KP3:
+                    elif event.key in { pygame.K_3, pygame.K_KP3 }:
                         ev = e.GetPiece(3)
-                    elif event.key == pygame.K_4 \
-                        or event.key == pygame.K_KP4:
+                    elif event.key in { pygame.K_4, pygame.K_KP4 }:
                         ev = e.GetPiece(4)
-                    elif event.key == pygame.K_5 \
-                        or event.key == pygame.K_KP5:
+                    elif event.key in { pygame.K_5, pygame.K_KP5 }:
                         ev = e.GetPiece(5)
                     elif event.key == pygame.K_z:
                         ev = e.RotPiece("rotCCW")
@@ -36,11 +31,9 @@ class KeyboardController:
                         ev = e.RotPiece("rotCW")
                     elif event.key == pygame.K_LSHIFT:
                         ev = e.RotPiece("flip")
-                    elif event.key == pygame.K_COMMA \
-                         or event.key == pygame.K_LESS:
+                    elif event.key in { pygame.K_COMMA, pygame.K_LESS }:
                         ev = e.NextPiece("b")
-                    elif event.key == pygame.K_PERIOD \
-                         or event.key == pygame.K_GREATER:
+                    elif event.key in { pygame.K_PERIOD, pygame.K_GREATER }:
                         ev = e.NextPiece("f")
                     elif event.key == pygame.K_UP:
                         ev = e.MovePiece("up")
@@ -50,8 +43,7 @@ class KeyboardController:
                         ev = e.MovePiece("left")
                     elif event.key == pygame.K_RIGHT:
                         ev = e.MovePiece("right")
-                    elif event.key == pygame.K_KP_ENTER \
-                         or event.key == pygame.K_RETURN:
+                    elif event.key == { pygame.K_KP_ENTER, pygame.K_RETURN }:
                         ev = e.PlacePiece()
                     elif event.key == pygame.K_ESCAPE:
                         ev = e.ResignEvent()
