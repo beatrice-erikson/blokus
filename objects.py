@@ -93,7 +93,7 @@ class Piece:
             else:   #if we didn't break...
                 continue
             break   #if we did break, break outer loop
-                    
+
         else:
             for r in range(len(self.m)):
                 for c in range(len(self.m[r])):
@@ -198,7 +198,7 @@ class Player:
         else:
             del self.pieces[pKey]
             self.getPiece(1)
-        
+
 
 class Players:
     def __init__(self, ps, evManager):
@@ -230,11 +230,11 @@ class Players:
         elif isinstance(event, e.GetPiece):
             self.cur.getPiece(event.num)
         elif isinstance(event, e.NextPiece):
-            self.cur.nextPiece(event.dir)
+            self.cur.nextPiece(event.direction)
         elif isinstance(event, e.RotPiece):
             self.cur.curPiece.rotflip(event.rottype)
         elif isinstance(event, e.MovePiece):
-            self.cur.curPiece.move(event.dir)
+            self.cur.curPiece.move(event.direction)
         elif isinstance(event, e.PlacePiece):
             if self.cur.hasntPlayed:
                 if self.cur.curPiece.placeFirst():

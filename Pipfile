@@ -1,7 +1,7 @@
 [packages]
 pygame = ">=1.9.3"
 numpy = ">=1.12.1"
-
+attrs = ">=17.1.0"
 
 [dev-packages]
 jupyter = "*"
