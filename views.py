@@ -22,7 +22,7 @@ class PygameView:
         display.flip()
     def drawBoard(self):
         space = image.load(join("sprites", "space.png"))
-        pieceImg = image.load(join("sprites", "piece.png"))
+        pieceImg = image.load(join("sprites", "piece.jpg"))
         pieceArray = surfarray.array3d(pieceImg)
         for row in o.board.matrix:
             for cell in row:
@@ -52,7 +52,7 @@ class PygameView:
         elif p.c == "y":
             pieceArray[:,:,2] = 0
         surfarray.blit_array(pieceImg, pieceArray)
-        pieceImg.set_alpha(150)
+        pieceImg.set_alpha(175)
         bpos = n.array((p.pos[0]*20+1, p.pos[1]*20+1))
         for r in range(len(p.curPiece.m)):
             for c in range(len(p.curPiece.m[0])):

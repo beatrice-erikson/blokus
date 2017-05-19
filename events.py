@@ -13,6 +13,10 @@ class QuitEvent(Event):
     def __init__(self):
         pass
 
+class PygameEvent(Event): #Holder class for pygame events
+    def __init__(self, ev):
+        self.ev = ev
+
 class NextTurn(Event):
     def __init__(self):
         pass

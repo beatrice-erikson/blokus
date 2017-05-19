@@ -51,15 +51,12 @@ class Piece:
             self.player.pos -= (0,1)
             botright -= (0,1)
     def rotflip(self,rottype):
-        print(self.m)
         if rottype == "rotCW":
             self.m = np.rot90(self.m,3)
         elif rottype == "rotCCW":
             self.m = np.rot90(self.m)
         elif rottype == "flip":
             self.m = np.fliplr(self.m)
-        print(rottype)
-        print(self.m)
         self.fixPos()
     def move(self, direction):
         if direction == "up":
@@ -234,7 +231,7 @@ class Players:
         elif isinstance(event, e.RotPiece):
             self.cur.curPiece.rotflip(event.rottype)
         elif isinstance(event, e.MovePiece):
-            self.cur.curPiece.move(event.dir)
+            self.cur.curPiece.move(event.direction)
         elif isinstance(event, e.PlacePiece):
             if self.cur.hasntPlayed:
                 if self.cur.curPiece.placeFirst():
