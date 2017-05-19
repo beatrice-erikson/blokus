@@ -9,7 +9,7 @@ class PygameView:
         self.evManager = evManager
         self.evManager.RegisterListener(self)
 
-        self.window = display.set_mode((500,400))
+        self.window = display.set_mode((700,420))
         self.winsize = self.window.get_size()
         display.set_caption("Blokus")
         self.background = Surface( self.window.get_size() )
@@ -19,6 +19,12 @@ class PygameView:
         self.scorebox = {"surf": Surface((100,200)), "loc": sbLoc }
         self.scorebox["surf"].fill((255,255,255))
         self.font = font.Font(None, 40)
+        pbLoc = (sbLoc[0] + 100, 0)
+        self.piecebox = {"surf": Surface((200,420)), "loc": pbLoc }
+        self.piecebox["surf"].fill((255,255,255))
+        self.drawBoard()
+        self.drawScores()
+        self.drawPlayerPieces()
         display.flip()
     def drawBoard(self):
         space = image.load(join("sprites", "space.png"))
@@ -67,9 +73,51 @@ class PygameView:
         for s in range(len(scores)):
              self.scorebox["surf"].blit(scores[s],(0,s*50))
         self.window.blit(self.scorebox["surf"],self.scorebox["loc"])
+    def drawPlayerPieces(self):
+        self.piecebox["surf"].fill((255,255,255))
+        pieceImg = image.load(join("sprites", "piecesmall.jpg"))
+        
+        pieceArrays = {"r": surfarray.array3d(pieceImg),
+                       "g": surfarray.array3d(pieceImg),
+                       "b": surfarray.array3d(pieceImg),
+                       "y": surfarray.array3d(pieceImg)}
+        pieceArrays["r"][:,:,1:] = 0
+        pieceArrays["g"][:,:,[0,2]] = 0
+        pieceArrays["b"][:,:,:2] = 0
+        pieceArrays["y"][:,:,2] = 0
+
+        bpos = n.array((0,0))
+        for player in o.players.players:
+            surfarray.blit_array(pieceImg, pieceArrays[player.c])
+            for size in player.pieces.keys():
+                for p in player.pieces[size]:
+                    if len(p.m) < len(p.m[0]):
+                        isTaller = True
+                        h = len(p.m)
+                    else:
+                        isTaller = False
+                        h = len(p.m[0])
+                    for r in range(len(p.m)):
+                        for c in range(len(p.m[0])):
+                            if isTaller:
+                                x = c
+                                y = r
+                            else:
+                                x = r
+                                y = c
+                            if p.m[r][c] == 1:
+                                pos = n.array((x*9,y*9))
+                                self.piecebox["surf"].blit(pieceImg, bpos+pos)
+                    bpos[1] += h*9 + 1
+            bpos[0] += 50
+            bpos[1] = 0
+        self.window.blit(self.piecebox["surf"],self.piecebox["loc"])
     def Notify(self, event):
         if isinstance(event, e.TickEvent):
             self.drawBoard()
             self.drawPiece()
+            display.update()
+        if isinstance(event, e.NextTurn):   #none of these change within a turn
             self.drawScores()
+            self.drawPlayerPieces()
             display.update()

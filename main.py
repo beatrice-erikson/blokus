@@ -1,3 +1,9 @@
+#Blokus in Pygame by Beatrice Evelyn Corfman, started 05/12/2017
+#The most recent version of this can be found at:
+#https://github.com/notthatstraight/blokus
+
+#MVC framework adapted from http://ezide.com/games/writing-games.html
+
 import sys
 import pygame
 import events as e
