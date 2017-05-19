@@ -40,7 +40,7 @@ class PygameView:
                     surfarray.blit_array(pieceImg, piece)
                     self.window.blit(pieceImg,(cell.x*20+1,cell.y*20+1))
     def drawPiece(self):
-        pieceImg = image.load(join("sprites", "piece.png"))
+        pieceImg = image.load(join("sprites", "piece.jpg"))
         p = o.players.cur
         pieceArray = surfarray.array3d(pieceImg)
         if p.c == "r":
@@ -52,6 +52,7 @@ class PygameView:
         elif p.c == "y":
             pieceArray[:,:,2] = 0
         surfarray.blit_array(pieceImg, pieceArray)
+        pieceImg.set_alpha(150)
         bpos = n.array((p.pos[0]*20+1, p.pos[1]*20+1))
         for r in range(len(p.curPiece.m)):
             for c in range(len(p.curPiece.m[0])):

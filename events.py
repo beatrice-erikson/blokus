@@ -27,11 +27,11 @@ class RotPiece(Event):
 
 class NextPiece(Event):
     def __init__(self, direction):
-        self.dir = direction
+        self.direction = direction
 
 class MovePiece(Event):
     def __init__(self, direction):
-        self.dir = direction
+        self.direction = direction
 
 class PlacePiece(Event):
     def __init__(self):

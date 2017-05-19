@@ -230,7 +230,7 @@ class Players:
         elif isinstance(event, e.GetPiece):
             self.cur.getPiece(event.num)
         elif isinstance(event, e.NextPiece):
-            self.cur.nextPiece(event.dir)
+            self.cur.nextPiece(event.direction)
         elif isinstance(event, e.RotPiece):
             self.cur.curPiece.rotflip(event.rottype)
         elif isinstance(event, e.MovePiece):
