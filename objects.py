@@ -19,8 +19,11 @@ class LinkedGridNode:
         self.color = c
 
 class LinkedGrid:
-    def __init__(self, width, height):
+    def __init__(self, width, height, cellSize):
         self.matrix = []
+        self.w = width
+        self.h = height
+        self.csize = cellSize
         for h in range(height):
             self.matrix.append([])
             for w in range(width):
@@ -50,6 +53,10 @@ class Piece:
         while botright[1] > 20:
             self.player.pos -= (0,1)
             botright -= (0,1)
+        while self.player.pos[0] < 0:
+            self.player.pos += (1,0)
+        while self.player.pos[1] < 0:
+            self.player.pos += (0,1)
     def rotflip(self,rottype):
         if rottype == "rotCW":
             self.m = np.rot90(self.m,3)
@@ -58,20 +65,6 @@ class Piece:
         elif rottype == "flip":
             self.m = np.fliplr(self.m)
         self.fixPos()
-    def move(self, direction):
-        if direction == "up":
-            self.player.pos -= (0,1)
-        elif direction == "down":
-            self.player.pos += (0,1)
-        elif direction == "left":
-            self.player.pos -= (1,0)
-        elif direction == "right":
-            self.player.pos += (1,0)
-        self.fixPos()
-        while self.player.pos[0] < 0:
-            self.player.pos += (1,0)
-        while self.player.pos[1] < 0:
-            self.player.pos += (0,1)
     def place(self):
         bpos = board.matrix[self.player.pos[0]][self.player.pos[1]]
         for r in range(len(self.m)):
@@ -185,6 +178,24 @@ class Player:
                 self.curPieceIndex = len(self.pieces[pKey])-1
         self.curPiece = self.pieces[pKey][self.curPieceIndex]
         self.curPiece.fixPos()
+    def move(self, direction, pos):
+        if direction:
+            if direction == "up":
+                self.pos -= (0,1)
+            elif direction == "down":
+                self.pos += (0,1)
+            elif direction == "left":
+                self.pos -= (1,0)
+            elif direction == "right":
+                self.pos += (1,0)
+            self.curPiece.fixPos()
+        elif pos:
+            prev = self.pos
+            self.pos = np.floor(np.array(pos)).astype(int)
+            self.curPiece.fixPos()
+            if (self.pos == prev).all():
+                players.evManager.Post(e.PlacePiece())
+            
     def delPiece(self):
         pKey = self.curPieceKey
         pIn = self.curPieceIndex
@@ -208,30 +219,36 @@ class Players:
         self.activePlayers = list(self.players)
         self.curI = 0
         self.cur = self.activePlayers[self.curI]
+        self.pieces = []
     def nextTurn(self):
         self.curI += 1
         if self.curI >= len(self.activePlayers):
             self.curI = 0
         self.cur = self.activePlayers[self.curI]
+        self.pieces = []
     def resign(self):
         resign = input("Are you sure you want to resign? (y/n)\n")
         while resign != "y" and resign != "n":
             resign = input("Please enter y or n: Are you sure you want to resign?\n")
         if resign == "y":
-            toRes = self.curI
-            self.nextTurn()
-            del self.activePlayers[toRes]
+            del self.activePlayers[self.curI]
+            self.curI -= 1
+            self.evManager.Post(e.NextTurn())
     def Notify(self, event):
         if isinstance(event, e.NextTurn):
             self.nextTurn()
         elif isinstance(event, e.GetPiece):
             self.cur.getPiece(event.num)
+        elif isinstance(event, e.SwitchPiece):
+            self.cur.getPiece(event.s)
+            while self.cur.curPiece is not event.p:
+                self.cur.nextPiece("f")
         elif isinstance(event, e.NextPiece):
             self.cur.nextPiece(event.direction)
         elif isinstance(event, e.RotPiece):
             self.cur.curPiece.rotflip(event.rottype)
         elif isinstance(event, e.MovePiece):
-            self.cur.curPiece.move(event.direction)
+            self.cur.move(event.direction, event.pos)
         elif isinstance(event, e.PlacePiece):
             if self.cur.hasntPlayed:
                 if self.cur.curPiece.placeFirst():
@@ -245,7 +262,7 @@ class Players:
 
 def createBoard(w=20,h=20, c=20):
     global board
-    board = LinkedGrid(w,h)
+    board = LinkedGrid(w,h,c)
 def createPlayers(num, evManager):
     global players
     players = Players(num, evManager)

@@ -40,6 +40,7 @@ def main():
     pygame.init()
     evManager = e.EventManager()
     keyb = c.KeyboardController(evManager)
+    mouse = c.MouseController(evManager)
     tick = c.TickController(evManager)
     init(evManager)
     pygameView = v.PygameView(evManager)

@@ -33,9 +33,15 @@ class NextPiece(Event):
     def __init__(self, direction):
         self.direction = direction
 
+class SwitchPiece(Event):
+    def __init__(self, size, piece):
+        self.s = size
+        self.p = piece
+
 class MovePiece(Event):
-    def __init__(self, direction):
+    def __init__(self, direction = None, pos = None):
         self.direction = direction
+        self.pos = pos
 
 class PlacePiece(Event):
     def __init__(self):
