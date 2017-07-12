@@ -11,7 +11,7 @@ class MouseController:
         if isinstance(event, e.PygameEvent):
             event = event.ev
             ev = None
-            if event.type == pygame.MOUSEBUTTONUP
+            if event.type == pygame.MOUSEBUTTONUP:
                 if event.button == 1:
                     mpos = pygame.mouse.get_pos()
                     csize = o.board.csize
