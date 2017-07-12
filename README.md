@@ -1,9 +1,11 @@
 # blokus
 
 blokus in pygame because why not  
-##
 
-Rules:
+
+
+## Rules:
+
 Your first piece must be placed in a corner. 
 For a two player game, this is restricted to the top-left and bottom-right
 
@@ -16,16 +18,17 @@ Your score is based on the total number of tiles in the pieces you haven't playe
 This version of the game does not give you a bonus for playing the 1-tile last.
 
   
-##Controls:
+
+## Controls:
 
 Place a piece: Enter, or click on top-left of piece on board (sort of)  
 
 Move a piece: arrow keys  
 
-Rotate piece clockwise: x  
+Rotate piece clockwise: x or scroll up  
 
 Rotate piece counterclockwise: z
-  
+ or scroll down  
 Flip piece: left shift  
 
 Go to previous/next piece of current size: </> or ,/.

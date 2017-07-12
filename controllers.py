@@ -25,7 +25,11 @@ class MouseController:
                         if r.collidepoint(mpos):
                             ev = e.SwitchPiece(p[1],p[2])
                             break
-                    
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 4:
+                    self.evManager.Post(e.RotPiece("rotCW"))
+                elif event.button == 5:
+                    self.evManager.Post(e.RotPiece("rotCCW"))
             if ev:
                 self.evManager.Post(ev)
 class KeyboardController:
