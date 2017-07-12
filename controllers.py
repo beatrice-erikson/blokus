@@ -11,20 +11,23 @@ class MouseController:
         if isinstance(event, e.PygameEvent):
             event = event.ev
             ev = None
-            if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-                mpos = pygame.mouse.get_pos()
-                csize = o.board.csize
-                if mpos <= (o.board.w*csize, o.board.h*csize):
-                #needs to be in bounds both x and y, so tuple compare works here
-                    pos = (mpos[0]/csize,mpos[1]/csize)
-                    ev = e.MovePiece(None, pos)
-                else:
-                    for p in o.players.pieces:
-                        r = p[0].get_rect()
-                        r.move_ip(p[0].get_abs_offset())
-                        if r.collidepoint(mpos):
-                            ev = e.SwitchPiece(p[1],p[2])
-                            break
+            if event.type == pygame.MOUSEBUTTONUP
+                if event.button == 1:
+                    mpos = pygame.mouse.get_pos()
+                    csize = o.board.csize
+                    if mpos <= (o.board.w*csize, o.board.h*csize):
+                    #needs to be in bounds both x and y, so tuple compare works here
+                        pos = (mpos[0]/csize,mpos[1]/csize)
+                        ev = e.MovePiece(None, pos)
+                    else:
+                        for p in o.players.pieces:
+                            r = p[0].get_rect()
+                            r.move_ip(p[0].get_abs_offset())
+                            if r.collidepoint(mpos):
+                                ev = e.SwitchPiece(p[1],p[2])
+                                break
+                elif event.button == 2:
+                    self.evManager.Post(e.RotPiece("flip"))
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 4:
                     self.evManager.Post(e.RotPiece("rotCW"))
