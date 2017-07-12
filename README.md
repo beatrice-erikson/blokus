@@ -35,7 +35,7 @@ Go to previous/next piece of current size: </> or ,/.
   
 Change to pieces of size [#]: #
   
-Resign/declare no moves remaining: escape  
+Resign/declare no moves remaining: escape twice in a row  
 
 
   

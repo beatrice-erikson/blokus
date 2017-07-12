@@ -220,6 +220,7 @@ class Players:
         self.curI = 0
         self.cur = self.activePlayers[self.curI]
         self.pieces = []
+        self.res = 0
     def nextTurn(self):
         self.curI += 1
         if self.curI >= len(self.activePlayers):
@@ -227,36 +228,42 @@ class Players:
         self.cur = self.activePlayers[self.curI]
         self.pieces = []
     def resign(self):
-        resign = input("Are you sure you want to resign? (y/n)\n")
-        while resign != "y" and resign != "n":
-            resign = input("Please enter y or n: Are you sure you want to resign?\n")
-        if resign == "y":
+        self.res += 1
+        if self.res >= 2:
             del self.activePlayers[self.curI]
             self.curI -= 1
             self.evManager.Post(e.NextTurn())
     def Notify(self, event):
         if isinstance(event, e.NextTurn):
             self.nextTurn()
+            self.res = 0
         elif isinstance(event, e.GetPiece):
             self.cur.getPiece(event.num)
+            self.res = 0
         elif isinstance(event, e.SwitchPiece):
             self.cur.getPiece(event.s)
             while self.cur.curPiece is not event.p:
                 self.cur.nextPiece("f")
+            self.res = 0
         elif isinstance(event, e.NextPiece):
             self.cur.nextPiece(event.direction)
+            self.res = 0
         elif isinstance(event, e.RotPiece):
             self.cur.curPiece.rotflip(event.rottype)
+            self.res = 0
         elif isinstance(event, e.MovePiece):
             self.cur.move(event.direction, event.pos)
+            self.res = 0
         elif isinstance(event, e.PlacePiece):
             if self.cur.hasntPlayed:
                 if self.cur.curPiece.placeFirst():
                     self.evManager.Post(e.NextTurn())
             elif self.cur.curPiece.placeRest():
                 self.evManager.Post(e.NextTurn())
+            self.res = 0
         elif isinstance(event, e.ResignEvent):
             self.resign()
+            print (self.res)
                 
             
 
